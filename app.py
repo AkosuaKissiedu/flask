@@ -7,8 +7,13 @@ app = Flask(__name__)
 
 model = pickle.load(open("model.pkl", "rb"))
 
-@app.route ('/',  methods=["GET", "POST"])
+@app.route ('/')
 def index():
+    return render_template('index.html')
+
+
+@app.route ("/predict", methods=["GET", "POST"])
+def predict():
     if request.method == "POST":
         print(request.form["Job Title"])
         print(request.form["Seniority Level"])
@@ -77,17 +82,17 @@ def index():
         elif (job_title_two == 'Business Intelligence Analyst') & (in_out_london == 'In Greater London') & (seniority_level == 'Mid-Senior level'):
             average_uk_annual_salary.append(74000)
         elif (job_title_two == 'Business Analyst') & (in_out_london == 'Outside Greater London') & (seniority_level == 'Entry level'):
-            average_uk_annual_salary.append(34986.206132)
+            average_uk_annual_salary.append(34000)
         elif (job_title_two == 'Business Analyst') & (in_out_london == 'Outside Greater London') & (seniority_level == 'Associate'):
-            average_uk_annual_salary.append(43347.407031)
+            average_uk_annual_salary.append(43000)
         elif (job_title_two == 'Business Analyst') & (in_out_london == 'Outside Greater London') & (seniority_level == 'Mid-Senior level'):
-            average_uk_annual_salary.append(51290.702062)
+            average_uk_annual_salary.append(70000)
         elif (job_title_two == 'Business Analyst') & (in_out_london == 'In Greater London') & (seniority_level == 'Entry level'):
-            average_uk_annual_salary.append(37696.019439)
+            average_uk_annual_salary.append(30000)
         elif (job_title_two == 'Business Analyst') & (in_out_london == 'In Greater London') & (seniority_level == 'Associate'):
-            average_uk_annual_salary.append(46854.961651)
+            average_uk_annual_salary.append(40000)
         elif (job_title_two == 'Business Analyst') & (in_out_london == 'In Greater London') & (seniority_level == 'Mid-Senior level'):
-            average_uk_annual_salary.append(52322.974685)
+            average_uk_annual_salary.append(68000)
 
         average_uk_annual_salary = float(average_uk_annual_salary[0])
         print(average_uk_annual_salary)
@@ -124,15 +129,16 @@ def index():
         print(features_df)
 
         prediction = model.predict(features_df)
+        prediction = prediction[0]
         print(prediction)
 
 
-    return render_template('index.html')
+    return render_template('result.html', prediction=prediction)
 
+@app.route ('/result')
+def result():
+    return render_template('result.html')
 
-# @app.route ("/predict", method=["GET", "POST"])
-# def predict():
-#     return json.dumps({'job_title': request.forms['job_title']})
 
 
 
