@@ -9,11 +9,16 @@ model = pickle.load(open("model.pkl", "rb"))
 
 @app.route ('/')
 def index():
-    return render_template('index.html')
+    return render_template('homepage.html')
+
+@app.route ("/form")
+def form():
+    return render_template('predict.html')
 
 
 @app.route ("/predict", methods=["GET", "POST"])
 def predict():
+    # print(request.form)
     if request.method == "POST":
         print(request.form["Job Title"])
         print(request.form["Seniority Level"])
@@ -130,14 +135,19 @@ def predict():
 
         prediction = model.predict(features_df)
         prediction = prediction[0]
+        upper_bound = round(1840 + prediction, 2)
+        lower_bound = round(prediction - 1840, 2)
         print(prediction)
+        print(lower_bound)
+        print(upper_bound)
 
 
-    return render_template('result.html', prediction=prediction)
 
-@app.route ('/result')
+    return render_template('results.html',  predictions=f"Your predicted annual salary range is: £{lower_bound} - £{upper_bound}")
+    
+@app.route ('/results')
 def result():
-    return render_template('result.html')
+    return render_template('results.html')
 
 
 

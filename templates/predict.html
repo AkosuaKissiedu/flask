@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            }
+        </style>
+    <style>
+        /* Style for the modal overlay */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        /* Style for the modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            z-index: 1000;
+            width: 80%;
+            /* Adjust the width as needed */
+            max-width: 600px;
+            /* Maximum width */
+            height: auto;
+            /* Adjust the height as needed */
+            max-height: 80%;
+            /* Maximum height */
+            overflow-y: auto;
+            /* Enable vertical scrolling if content overflows */
+        }
+    </style>
+</head>
+
+<body style="background-color:hsla(240,81%,2%,1);
+background-image:
+radial-gradient(at 40% 20%, hsla(8,27%,20%,1) 0px, transparent 50%),
+radial-gradient(at 80% 0%, hsla(189,81%,9%,1) 0px, transparent 50%),
+radial-gradient(at 0% 50%, hsla(341,0%,35%,1) 0px, transparent 50%),
+radial-gradient(at 80% 50%, hsla(341,81%,21%,1) 0px, transparent 50%),
+radial-gradient(at 0% 100%, hsla(19,64%,14%,1) 0px, transparent 50%),
+radial-gradient(at 80% 100%, hsla(240,100%,64%,1) 0px, transparent 50%),
+radial-gradient(at 0% 0%, hsla(343,100%,76%,1) 0px, transparent 50%);">
+    <div class="max-w-3xl mx-auto p-6">
+        <form method="POST" action="/predict"class="bg-white rounded-lg shadow-md p-8" id="predictionForm">
+            <div class="space-y-12">
+
+                <div class="border-b border-gray-200 pb-12">
+                    <h2 class="text-lg font-bold text-gray-900">Salary Prediction Tool</h2>
+                    <p class="mt-2 text-sm text-gray-600">Make selections from the items below to predict your
+                        salary</p>
+                    <div class="border-b border-gray-200 pb-8"></div>
+                    <div class="flex mt-8  gap-6 sm:grid-cols-6">
+                        <!-- Profile fields -->
+                        <div class="w-50%">
+                            <label for="JobTitle" class="block text-sm font-medium leading-6 text-gray-900">Job
+                                Title</label>
+
+                            <div class=" mt-5 relative h-10 w-72 min-w-[200px]">
+                                <select
+                                    class="peer h-full w-full rounded-[7px] border border-blue-gray-200 border-t-transparent bg-transparent px-3 py-2.5 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 empty:!bg-gray-900 focus:border-2 focus:border-gray-900 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
+                                    name="Job Title" required>
+
+                                    <option value="" disabled selected>-- Select Job Title --</option>
+                                    <option value="Data Analyst">Data Analyst</option>
+                                    <option value="Data Engineer">Data Engineer</option>
+                                    <option value="Business Analyst">Business Analyst</option>
+                                    <option value="Insights Analyst">Insights Analyst</option>
+                                    <option value="Business Intelligence Analyst">Business Intelligence Analyst</option>
+
+                                </select>
+                                <label
+                                    class="before:content[' '] after:content[' '] pointer-events-none absolute left-0 -top-1.5 flex h-full w-full select-none text-[11px] font-normal leading-tight text-blue-gray-400 transition-all before:pointer-events-none before:mt-[6.5px] before:mr-1 before:box-border before:block before:h-1.5 before:w-2.5 before:rounded-tl-md before:border-t before:border-l before:border-blue-gray-200 before:transition-all after:pointer-events-none after:mt-[6.5px] after:ml-1 after:box-border after:block after:h-1.5 after:w-2.5 after:flex-grow after:rounded-tr-md after:border-t after:border-r after:border-blue-gray-200 after:transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:leading-[3.75] peer-placeholder-shown:text-blue-gray-500 peer-placeholder-shown:before:border-transparent peer-placeholder-shown:after:border-transparent peer-focus:text-[11px] peer-focus:leading-tight peer-focus:text-gray-900 peer-focus:before:border-t-2 peer-focus:before:border-l-2 peer-focus:before:border-gray-900 peer-focus:after:border-t-2 peer-focus:after:border-r-2 peer-focus:after:border-gray-900 peer-disabled:text-transparent peer-disabled:before:border-transparent peer-disabled:after:border-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500">
+
+                                </label>
+                            </div>
+
+                        </div>
+
+                        <div class="w-50%">
+                            <label for="Seniority Level" class="block text-sm font-medium leading-6 text-gray-900">Seniority
+                                Level</label>
+
+                            <div class=" mt-5 relative h-10 w-72 min-w-[200px]">
+                                <select
+                                    class="peer h-full w-full rounded-[7px] border border-blue-gray-200 border-t-transparent bg-transparent px-3 py-2.5 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 empty:!bg-gray-900 focus:border-2 focus:border-gray-900 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
+                                    name="Seniority Level" required>
+                                    <option value="" disabled selected>-- Select Seniority Level --</option>
+                                    <option value="Entry level" required>Entry Level</option>
+                                    <option value="Associate">Associate</option>
+                                    <option value="Mid-Senior level">Senior</option>
+                                </select>
+                                <label
+                                    class="before:content[' '] after:content[' '] pointer-events-none absolute left-0 -top-1.5 flex h-full w-full select-none text-[11px] font-normal leading-tight text-blue-gray-400 transition-all before:pointer-events-none before:mt-[6.5px] before:mr-1 before:box-border before:block before:h-1.5 before:w-2.5 before:rounded-tl-md before:border-t before:border-l before:border-blue-gray-200 before:transition-all after:pointer-events-none after:mt-[6.5px] after:ml-1 after:box-border after:block after:h-1.5 after:w-2.5 after:flex-grow after:rounded-tr-md after:border-t after:border-r after:border-blue-gray-200 after:transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:leading-[3.75] peer-placeholder-shown:text-blue-gray-500 peer-placeholder-shown:before:border-transparent peer-placeholder-shown:after:border-transparent peer-focus:text-[11px] peer-focus:leading-tight peer-focus:text-gray-900 peer-focus:before:border-t-2 peer-focus:before:border-l-2 peer-focus:before:border-gray-900 peer-focus:after:border-t-2 peer-focus:after:border-r-2 peer-focus:after:border-gray-900 peer-disabled:text-transparent peer-disabled:before:border-transparent peer-disabled:after:border-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500">
+
+                                </label>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border-b border-gray-200 pb-12">
+                    <h2 class="text-lg font-semibold text-gray-900">Locale</h2>
+                    <p class="mt-2 text-sm text-gray-600">Please provide information about the role's location and industry.
+                    </p>
+
+                    <div class="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-6">
+                        <!-- Location and industry information fields -->
+                        <div class="flex mt-3  gap-6 sm:grid-cols-6">
+
+                            <div class="w-50%">
+                                <label for="Location"
+                                    class="block text-sm font-medium leading-6 text-gray-900">Location</label>
+
+                                <div class=" mt-5 relative h-10 w-72 min-w-[200px]">
+                                    <select
+                                        class="peer h-full w-full rounded-[7px] border border-blue-gray-200 border-t-transparent bg-transparent px-3 py-2.5 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 empty:!bg-gray-900 focus:border-2 focus:border-gray-900 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
+                                        name="Location"
+                                        required>
+                                        <option value="" disabled selected>-- Select Location --</option>
+
+                                        <option value="In Greater London">Greater London</option>
+                                        <option value="Outside Greater London">Outside Greater London</option>
+
+                                    </select>
+                                    <label
+                                        class="before:content[' '] after:content[' '] pointer-events-none absolute left-0 -top-1.5 flex h-full w-full select-none text-[11px] font-normal leading-tight text-blue-gray-400 transition-all before:pointer-events-none before:mt-[6.5px] before:mr-1 before:box-border before:block before:h-1.5 before:w-2.5 before:rounded-tl-md before:border-t before:border-l before:border-blue-gray-200 before:transition-all after:pointer-events-none after:mt-[6.5px] after:ml-1 after:box-border after:block after:h-1.5 after:w-2.5 after:flex-grow after:rounded-tr-md after:border-t after:border-r after:border-blue-gray-200 after:transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:leading-[3.75] peer-placeholder-shown:text-blue-gray-500 peer-placeholder-shown:before:border-transparent peer-placeholder-shown:after:border-transparent peer-focus:text-[11px] peer-focus:leading-tight peer-focus:text-gray-900 peer-focus:before:border-t-2 peer-focus:before:border-l-2 peer-focus:before:border-gray-900 peer-focus:after:border-t-2 peer-focus:after:border-r-2 peer-focus:after:border-gray-900 peer-disabled:text-transparent peer-disabled:before:border-transparent peer-disabled:after:border-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500">
+
+                                    </label>
+                                </div>
+
+                            </div>
+
+                            <div class="w-50%">
+                                <label for="Industry"
+                                    class="block text-sm font-medium leading-6 text-gray-900">Industry</label>
+
+                                <div class=" mt-5 relative h-10 w-72 min-w-[200px]">
+                                    <select
+                                        class="peer h-full w-full rounded-[7px] border border-blue-gray-200 border-t-transparent bg-transparent px-3 py-2.5 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 empty:!bg-gray-900 focus:border-2 focus:border-gray-900 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
+                                        name="Industry" required>
+                                        <option value="" disabled selected>-- Select Industry --</option>
+                                        <option value="Accounting">Accounting</option>
+                                        <option value="Advertising">Advertising</option>
+                                        <option value="Aviation">Aviation</option>
+                                        <option value="Banking">Banking</option>
+                                        <option value="Biotechnology">Biotechnology</option>
+                                        <option value="Consulting">Consulting</option>
+                                        <option value="Construction">Construction</option>
+                                        <option value="Data Analytics">Data Analytics</option>
+                                        <option value="Education">Education</option>
+                                        <option value="Electronics">Electronics</option>
+                                        <option value="Finance">Finance</option>
+                                        <option value="Health">Health</option>
+                                        <option value="Hospitality">Hospitality</option>
+                                        <option value="Human Resources">Human Resources</option>
+                                        <option value="Information Technology">Information Technology</option>
+                                        <option value="Insurance">Insurance</option>
+                                        <option value="Legal">Legal</option>
+                                        <option value="Manufacturing">Manufacturing</option>
+                                        <option value="Marketing">Marketing</option>
+                                        <option value="Media">Media</option>
+                                        <option value="Non Profit">Non Profit</option>
+                                        <option value="Professional Services">Professional Services</option>
+                                        <option value="Publishing">Publishing</option>
+                                        <option value="Real Estate">Real Estate</option>
+                                        <option value="Retail">Retail</option>
+                                        <option value="Staffing">Staffing</option>
+                                        <option value="Supply Chain">Supply Chain</option>
+                                        <option value="Telecommunication">Telecommunication</option>
+                                        <option value="Transportation">Transportation</option>
+                                        <option value="Utilities">Utilities</option>
+                                        <!-- <option value="others">Other</option> -->
+
+
+                                    </select>
+                                    <label
+                                        class="before:content[' '] after:content[' '] pointer-events-none absolute left-0 -top-1.5 flex h-full w-full select-none text-[11px] font-normal leading-tight text-blue-gray-400 transition-all before:pointer-events-none before:mt-[6.5px] before:mr-1 before:box-border before:block before:h-1.5 before:w-2.5 before:rounded-tl-md before:border-t before:border-l before:border-blue-gray-200 before:transition-all after:pointer-events-none after:mt-[6.5px] after:ml-1 after:box-border after:block after:h-1.5 after:w-2.5 after:flex-grow after:rounded-tr-md after:border-t after:border-r after:border-blue-gray-200 after:transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:leading-[3.75] peer-placeholder-shown:text-blue-gray-500 peer-placeholder-shown:before:border-transparent peer-placeholder-shown:after:border-transparent peer-focus:text-[11px] peer-focus:leading-tight peer-focus:text-gray-900 peer-focus:before:border-t-2 peer-focus:before:border-l-2 peer-focus:before:border-gray-900 peer-focus:after:border-t-2 peer-focus:after:border-r-2 peer-focus:after:border-gray-900 peer-disabled:text-transparent peer-disabled:before:border-transparent peer-disabled:after:border-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500">
+
+                                    </label>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+
+                <div class="border-b border-gray-200 pb-12">
+                    <h2 class="text-lg font-semibold text-gray-900">Technologies</h2>
+                    <p class="mt-2 text-sm text-gray-600">Please provide details about your technical tools and tech
+                        stack.</p>
+
+                    <div class="mt-8 space-y-8">
+                        <div class=" mt-8  gap-6 sm:grid-cols-6">
+                            <!-- Profile fields -->
+                            <div class="w-50%">
+                                <label for="username"
+                                    class="block text-sm font-medium leading-6 text-gray-900 mb-4">Tech
+                                    Stack
+                                    <p class="mt-2 text-sm text-gray-600">If the job role requires any of these tools, select them below.</p>
+                                </label>
+                                    
+
+
+
+                                <div
+                                    class="border border-gray-200 relative flex w-full  flex-col rounded-xl bg-white bg-clip-border text-gray-700 ">
+                                    <nav
+                                        class="flex min-w-[240px] flex-row gap-1 p-2 font-sans text-base font-normal text-blue-gray-700 ">
+                                        <div role="button"
+                                            class="flex items-center w-full p-0 leading-tight transition-all rounded-lg outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 active:bg-opacity-80 active:text-blue-gray-900">
+                                            <label htmlFor="horizontal-list-react"
+                                                class="flex items-center w-full px-3 py-2 cursor-pointer"
+                                                for="Excel">
+                                                <div class="grid mr-3 place-items-center">
+                                                    <div class="inline-flex items-center">
+                                                        <label
+                                                            class="relative flex items-center p-0 rounded-full cursor-pointer"
+                                                            htmlFor="horizontal-list-react"
+                                                            for="Excel">
+                                                            <input id="horizontal-list-react" type="checkbox"
+                                                                class="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-md border border-blue-gray-200 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-gray-900 checked:bg-gray-900 checked:before:bg-gray-900 hover:before:opacity-0" 
+                                                                name="Excel" value="1" />
+                                                            <span
+                                                                class="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
+                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                    class="h-3.5 w-3.5" viewBox="0 0 20 20"
+                                                                    fill="currentColor" stroke="currentColor"
+                                                                    stroke-width="1">
+                                                                    <path fill-rule="evenodd"
+                                                                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                                                        clip-rule="evenodd"></path>
+                                                                </svg>
+                                                            </span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <p
+                                                    class="block font-sans text-base antialiased font-medium leading-relaxed text-blue-gray-900">
+                                                    Excel
+                                                </p>
+                                            </label>
+                                        </div>
+                                        <div role="button"
+                                            class="flex items-center w-full p-0 leading-tight transition-all rounded-lg outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 active:bg-opacity-80 active:text-blue-gray-900">
+                                            <label htmlFor="horizontal-list-vue"
+                                                class="flex items-center w-full px-3 py-2 cursor-pointer"
+                                                for="SQL">
+                                                <div class="grid mr-3 place-items-center">
+                                                    <div class="inline-flex items-center">
+                                                        <label
+                                                            class="relative flex items-center p-0 rounded-full cursor-pointer"
+                                                            htmlFor="horizontal-list-vue"
+                                                            for="SQL">
+                                                            <input id="horizontal-list-vue" type="checkbox"
+                                                                class="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-md border border-blue-gray-200 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-gray-900 checked:bg-gray-900 checked:before:bg-gray-900 hover:before:opacity-0" 
+                                                                name="Sql" value="1"/>
+                                                            <span
+                                                                class="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
+                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                    class="h-3.5 w-3.5" viewBox="0 0 20 20"
+                                                                    fill="currentColor" stroke="currentColor"
+                                                                    stroke-width="1">
+                                                                    <path fill-rule="evenodd"
+                                                                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                                                        clip-rule="evenodd"></path>
+                                                                </svg>
+                                                            </span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <p
+                                                    class="block font-sans text-base antialiased font-medium leading-relaxed text-blue-gray-900">
+                                                    SQL
+                                                </p>
+                                            </label>
+                                        </div>
+                                        <div role="button"
+                                            class="flex items-center w-full p-0 leading-tight transition-all rounded-lg outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 active:bg-opacity-80 active:text-blue-gray-900">
+                                            <label htmlFor="horizontal-list-svelte"
+                                                class="flex items-center w-full px-3 py-2 cursor-pointer"
+                                                for="Tableau">
+                                                <div class="grid mr-3 place-items-center">
+                                                    <div class="inline-flex items-center">
+                                                        <label
+                                                            class="relative flex items-center p-0 rounded-full cursor-pointer"
+                                                            htmlFor="horizontal-list-svelte"
+                                                            for="Tableau">
+                                                            <input id="horizontal-list-svelte" type="checkbox"
+                                                                class="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-md border border-blue-gray-200 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-gray-900 checked:bg-gray-900 checked:before:bg-gray-900 hover:before:opacity-0" 
+                                                                name="Tableau" value="1"/>
+                                                            <span
+                                                                class="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
+                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                    class="h-3.5 w-3.5" viewBox="0 0 20 20"
+                                                                    fill="currentColor" stroke="currentColor"
+                                                                    stroke-width="1">
+                                                                    <path fill-rule="evenodd"
+                                                                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                                                        clip-rule="evenodd"></path>
+                                                                </svg>
+                                                            </span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <p
+                                                    class="block font-sans text-base antialiased font-medium leading-relaxed text-blue-gray-900">
+                                                    Tableau
+                                                </p>
+                                            </label>
+                                        </div>
+                                        <div role="button"
+                                            class="flex items-center w-full p-0 leading-tight transition-all rounded-lg outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 active:bg-opacity-80 active:text-blue-gray-900">
+                                            <label htmlFor="horizontal-list-svelte"
+                                                class="flex items-center w-full px-3 py-2 cursor-pointer"
+                                                for="PowerBI">
+                                                <div class="grid mr-3 place-items-center">
+                                                    <div class="inline-flex items-center">
+                                                        <label
+                                                            class="relative flex items-center p-0 rounded-full cursor-pointer"
+                                                            htmlFor="horizontal-list-svelte"
+                                                            for="PowerBI">
+                                                            <input id="horizontal-list-svelte" type="checkbox"
+                                                                class="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-md border border-blue-gray-200 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-gray-900 checked:bg-gray-900 checked:before:bg-gray-900 hover:before:opacity-0" 
+                                                                name="PowerBI" value="1"/>
+                                                            <span
+                                                                class="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
+                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                    class="h-3.5 w-3.5" viewBox="0 0 20 20"
+                                                                    fill="currentColor" stroke="currentColor"
+                                                                    stroke-width="1">
+                                                                    <path fill-rule="evenodd"
+                                                                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                                                        clip-rule="evenodd"></path>
+                                                                </svg>
+                                                            </span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <p
+                                                    class="block font-sans text-base antialiased font-medium leading-relaxed text-blue-gray-900">
+                                                    PowerBI
+                                                </p>
+                                            </label>
+                                        </div>
+                                        <div role="button"
+                                            class="flex items-center w-full p-0 leading-tight transition-all rounded-lg outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 active:bg-opacity-80 active:text-blue-gray-900">
+                                            <label htmlFor="horizontal-list-svelte"
+                                                class="flex items-center w-full px-3 py-2 cursor-pointer"
+                                                for="Python">
+                                                <div class="grid mr-3 place-items-center">
+                                                    <div class="inline-flex items-center">
+                                                        <label
+                                                            class="relative flex items-center p-0 rounded-full cursor-pointer"
+                                                            htmlFor="horizontal-list-svelte"
+                                                            for="Python">
+                                                            <input id="horizontal-list-svelte" type="checkbox"
+                                                                class="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-md border border-blue-gray-200 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-gray-900 checked:bg-gray-900 checked:before:bg-gray-900 hover:before:opacity-0" 
+                                                                name="Python" value="1"/>
+                                                            <span
+                                                                class="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
+                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                    class="h-3.5 w-3.5" viewBox="0 0 20 20"
+                                                                    fill="currentColor" stroke="currentColor"
+                                                                    stroke-width="1">
+                                                                    <path fill-rule="evenodd"
+                                                                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                                                        clip-rule="evenodd"></path>
+                                                                </svg>
+                                                            </span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <p
+                                                    class="block font-sans text-base antialiased font-medium leading-relaxed text-blue-gray-900">
+                                                    Python
+                                                </p>
+                                            </label>
+                                        </div>
+                                    </nav>
+                                </div>
+
+                            </div>
+
+
+
+                            <div class=" mt-5 ml-1">
+                                <label for="username" class="block text-sm font-medium leading-6 text-gray-900">Tech
+                                    Tools
+                                    <p class="mt-2 text-sm text-gray-600">How many technical tools and progamming languages does this role require</p>
+                                </label>
+
+                                <div class=" mt-5 mb-5 relative h-10 w-72 min-w-[200px]">
+                                    <select
+                                        class="peer h-full w-full rounded-[7px] border border-blue-gray-200 border-t-transparent bg-transparent px-3 py-2.5 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 empty:!bg-gray-900 focus:border-2 focus:border-gray-900 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
+                                        name="Tech Tools" required>
+                                        <option value="" disabled selected>-- Select Tech Tools --</option>
+                                        <option value="0-3">0-3</option>
+                                        <option value="4-6">4-6</option>
+                                        <option value="7-9">7-9</option>
+                                        <option value="10+">10+</option>
+
+
+
+                                    </select>
+                                    <label
+                                        class="before:content[' '] after:content[' '] pointer-events-none absolute left-0 -top-1.5 flex h-full w-full select-none text-[11px] font-normal leading-tight text-blue-gray-400 transition-all before:pointer-events-none before:mt-[6.5px] before:mr-1 before:box-border before:block before:h-1.5 before:w-2.5 before:rounded-tl-md before:border-t before:border-l before:border-blue-gray-200 before:transition-all after:pointer-events-none after:mt-[6.5px] after:ml-1 after:box-border after:block after:h-1.5 after:w-2.5 after:flex-grow after:rounded-tr-md after:border-t after:border-r after:border-blue-gray-200 after:transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:leading-[3.75] peer-placeholder-shown:text-blue-gray-500 peer-placeholder-shown:before:border-transparent peer-placeholder-shown:after:border-transparent peer-focus:text-[11px] peer-focus:leading-tight peer-focus:text-gray-900 peer-focus:before:border-t-2 peer-focus:before:border-l-2 peer-focus:before:border-gray-900 peer-focus:after:border-t-2 peer-focus:after:border-r-2 peer-focus:after:border-gray-900 peer-disabled:text-transparent peer-disabled:before:border-transparent peer-disabled:after:border-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500">
+
+                                    </label>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="mt-8 flex items-center justify-end gap-6">
+                <button type="reset" class="text-sm font-semibold text-gray-900">Clear</button>
+                <button id="open-modal2" type="submit"
+                    class="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white 
+                    shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 
+                    focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Predict
+                </button>
+            </div>
+        </form>
+
+
+
+        <!--MODAL////////////////////////////////-->
+        <!-- Modal Overlay -->
+        <!-- <div id="modal-overlay" class="modal-overlay"></div> -->
+
+        <!-- First Modal -->
+        <!-- <div id="modal1" class="modal">
+            <h1 class="text-2xl font-bold mb-4">Welcome to our website!</h1>
+            <p>This is a modal that pops up on initial page load.</p>
+            <button id="close-modal1" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md">Close</button>
+        </div> -->
+
+        <!-- Second Modal -->
+        <!-- <div id="modal2" class="modal">
+            <h1 class="text-2xl font-bold mb-4">Results</h1> 
+            <p><b>{{ predictions }}</b></p>
+            <button id="close-modal2" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md">Close</button>
+        </div> -->
+
+
+        <!-- <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                // Remove the first modal from the DOM
+                const modal1 = document.getElementById('modal1');
+                modal1.parentNode.removeChild(modal1);
+
+                // Show second modal when button is clicked
+                document.getElementById('open-modal2')
+                .addEventListener('click', function () {
+                    const modalOverlay = document.getElementById('modal-overlay');
+                    const modal2 = document.getElementById('modal2');
+                    modalOverlay.style.display = 'block';
+                    modal2.style.display = 'block';
+                });
+
+                // Close second modal when close button is clicked
+                document.getElementById('close-modal2').addEventListener('click', function () {
+                    const modalOverlay = document.getElementById('modal-overlay');
+                    modalOverlay.style.display = 'none';
+                    document.getElementById('modal2').style.display = 'none';
+                });
+            });
+        </script> -->
+    </div>
+</body>
+
+</html>

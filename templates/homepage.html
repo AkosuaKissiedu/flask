@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to The Salary Guide</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        body {
+            background: radial-gradient(at 40% 20%, hsla(8, 27%, 20%, 1) 0px, transparent 50%),
+                radial-gradient(at 80% 0%, hsla(189, 81%, 9%, 1) 0px, transparent 50%),
+                radial-gradient(at 0% 50%, hsla(341, 0%, 35%, 1) 0px, transparent 50%),
+                radial-gradient(at 80% 50%, hsla(341, 81%, 21%, 1) 0px, transparent 50%),
+                radial-gradient(at 0% 100%, hsla(19, 64%, 14%, 1) 0px, transparent 50%),
+                radial-gradient(at 80% 100%, hsla(240, 100%, 64%, 1) 0px, transparent 50%),
+                radial-gradient(at 0% 0%, hsla(343, 100%, 76%, 1) 0px, transparent 50%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .hero {
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            text-align: center;
+            max-width: 60rem;
+            animation: fadeIn 1s ease-in-out;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            background-color: #4f46e5;
+            color: white;
+            font-weight: bold;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #4338ca;
+            transform: translateY(-2px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="hero">
+        <h1>The Salary Guide</h1>
+        <p>Ever wondered what your earning potential could be in the dynamic data industry?
+            Look no further! This machine learning model, powered by XGBoost regression
+            predicts annual salary ranges for data professionals across various industries and job roles.
+        </p>
+        <p>Curious about how our model works its magic? 
+            Dive deeper into the intricacies of its development in this 4 part series starting here:
+            <a href="https://medium.com/@afaribeak/from-text-to-numbers-creating-a-salary-prediction-model-with-job-descriptions-13404490ab96" style="text-decoration: underline; font-weight: bold;">Building a salary prediction model</a>
+        </p>
+        <form action="/form" method="GET">
+            <button class="btn" type="submit">Get Started</button>
+        </form>
+    </div>
+</body>
+
+</html>
